@@ -31,7 +31,8 @@ func main() {
 	defer line.Close()
 	defer lfs.CloseChannels()
 
-	// listen the measurement if you want to take action or print the values. Do whatever you want.
+	// Listen the measurement if you want to take action or print the values. Do whatever you want.
+	// Here shutdown when 100 liters are measured
 	for {
 		printMeasurement(<-lfs.Subscribe())
 		if lfs.GetMeasurement() > 100 {

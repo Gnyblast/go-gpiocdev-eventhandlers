@@ -32,16 +32,14 @@ func main() {
 	defer line.Close()
 	defer pcs.CloseChannels()
 
-	// listen the measurement if you want to take action or print the values. Do whatever you want.
-	for {
-		printMeasurement(<-pcs.Subscribe())
-		if pcs.GetMeasurement() > 100 {
-			break
-		}
+	// Listen the measurement if you want to take action or print the values. Do whatever you want.
+	// Here shutdown after measuring 1000 times
+	for i := 0; i < 1000; i++ {
+		printMeasurement(i, <-pcs.Subscribe())
 	}
 
 }
 
-func printMeasurement(measurement int) {
-	log.Printf("Brightness is: %d", measurement)
+func printMeasurement(noOfMeasurement int, measurement int) {
+	log.Printf("Measurement %d, Brightness is: %d", noOfMeasurement, measurement)
 }
