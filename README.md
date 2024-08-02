@@ -1,4 +1,4 @@
-# gpiocdev-eventhandler
+# gpiocdev-eventhandlers
 
 This repository aims to provide handlers for the [go-gpiocdev](https://github.com/warthog618/go-gpiocdev) Library's `gpiocdev.WithEventHandler` line option.
 
