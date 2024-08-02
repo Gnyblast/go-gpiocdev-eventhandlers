@@ -1,6 +1,6 @@
 # gpiocdev-eventhandler
 
-This repository aims to provide handlers for the [go-gpicdev](https://github.com/warthog618/go-gpiocdev) Library's `gpiocdev.WithEventHandler` line option.
+This repository aims to provide handlers for the [go-gpiocdev](https://github.com/warthog618/go-gpiocdev) Library's `gpiocdev.WithEventHandler` line option.
 
 It's still under development with two sensor added to the library without tests are performed.
 
