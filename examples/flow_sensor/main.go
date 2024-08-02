@@ -3,26 +3,29 @@ package main
 import (
 	"log"
 
-	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/handlers"
+	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/factory"
+	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/sensors"
 	"github.com/warthog618/go-gpiocdev"
 	"github.com/warthog618/go-gpiocdev/device/rpi"
 )
 
-const inputMultiplier float32 = 0.002222222 // 0.002222222 is the multiplier value for a flow meter that has 450 pulses per liter = (1/450).
+const inputMultiplier float64 = 0.002222222 // 0.002222222 is the multiplier value for a flow meter that has 450 pulses per liter = (1/450).
+const chip string = "gpiochip0"
+const pinName string = ""
 
 func main() {
 
 	//Initialize the sensor handler
-	lfs := handlers.NewLiquidFlowSensorHandler(inputMultiplier)
+	lfs := factory.InitializeEventHandlerFor(sensors.FLOW_SENSOR, chip, pinName, inputMultiplier)
 
 	// Get the pin for the device
-	pin, err := rpi.Pin("GPIO4")
+	pin, err := rpi.Pin(pinName)
 	if err != nil {
 		log.Fatalf("failed to get pin: %s", err.Error())
 	}
 
 	// Get the line by passing the handler from the sensor as WithEventHandler
-	line, err := gpiocdev.RequestLine("gpiochip0", pin, gpiocdev.WithPullUp, gpiocdev.WithBothEdges, gpiocdev.WithEventHandler(lfs.Measure))
+	line, err := gpiocdev.RequestLine(chip, pin, gpiocdev.WithPullUp, gpiocdev.WithBothEdges, gpiocdev.WithEventHandler(lfs.Measure))
 	if err != nil {
 		log.Fatalf("failed to request line: %s", err.Error())
 	}
@@ -42,6 +45,6 @@ func main() {
 
 }
 
-func printMeasurement(measurement float32) {
+func printMeasurement(measurement float64) {
 	log.Printf("%f Liters flowed", measurement)
 }

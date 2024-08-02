@@ -6,7 +6,7 @@ It's still under development with two sensor added to the library without tests 
 
 ## Usage
 
-- Each handler is a stuct that implements `IEventHandlers` generic interface. 
+- Each handler is a stuct that implements `IEventHandlers` generic interface.
 - `Measure()` method is used as the main handler that does the logic/calculation/measurement for the sensor data. This should be passed to `WithEeventHandler()` method.
 - `Subscribe()` is for listening measurement if immediate responses are needed when a measurement is done. It's a channel type.
 - `CloseChannels()` is the method that closes the above channel. Best to be called when usage is no more required.
@@ -15,7 +15,7 @@ It's still under development with two sensor added to the library without tests 
 A simple example might look like the following:
 
 ```go
-lfs := handlers.NewLiquidFlowSensorHandler(0.002222222)
+lfs :=factory.InitializeEventHandlerFor(sensors.FLOW_SENSOR, "gpiochip0", "GPIO4", 0.002222222)
 defer lfs.CloseChannels()
 
 gpiocdev.RequestLine("gpiochip0", pin, gpiocdev.WithPullUp, gpiocdev.WithBothEdges, gpiocdev.WithEventHandler(lfs.Measure))

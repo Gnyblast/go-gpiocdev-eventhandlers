@@ -7,27 +7,27 @@ import (
 	"github.com/warthog618/go-gpiocdev/device/rpi"
 )
 
-type PhotocellSensorHandler[T int] struct {
-	ongoingMeasurement int
+type PhotocellSensorHandler struct {
+	ongoingMeasurement float64
 	lineChip           string
 	pinNumber          string
-	BaseEventHandler[T]
+	BaseEventHandler
 }
 
-func NewPhotocellSensorHandler(chip string, pin string) *PhotocellSensorHandler[int] {
+func NewPhotocellSensorHandler(chip string, pin string) *PhotocellSensorHandler {
 
-	return &PhotocellSensorHandler[int]{
+	return &PhotocellSensorHandler{
 		ongoingMeasurement: 0,
 		lineChip:           chip,
 		pinNumber:          pin,
-		BaseEventHandler: BaseEventHandler[int]{
+		BaseEventHandler: BaseEventHandler{
 			measurement: 0,
-			measured:    make(chan int),
+			measured:    make(chan float64),
 		},
 	}
 }
 
-func (h *PhotocellSensorHandler[T]) Measure(evt gpiocdev.LineEvent) {
+func (h *PhotocellSensorHandler) Measure(evt gpiocdev.LineEvent) {
 	if h.ongoingMeasurement == 0 {
 		err := h.setLineToZero()
 		if err != nil {
@@ -51,13 +51,13 @@ func (h *PhotocellSensorHandler[T]) Measure(evt gpiocdev.LineEvent) {
 	}
 
 	if evt.Type == gpiocdev.LineEventRisingEdge {
-		h.measurement = T(h.ongoingMeasurement)
+		h.measurement = h.ongoingMeasurement
 		h.ongoingMeasurement = 0
 		h.measured <- h.measurement
 	}
 }
 
-func (h PhotocellSensorHandler[T]) setLineToZero() error {
+func (h PhotocellSensorHandler) setLineToZero() error {
 	pin, err := rpi.Pin(h.pinNumber)
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ func (h PhotocellSensorHandler[T]) setLineToZero() error {
 	return nil
 }
 
-func (h PhotocellSensorHandler[T]) setLineToInput() error {
+func (h PhotocellSensorHandler) setLineToInput() error {
 	pin, err := rpi.Pin(h.pinNumber)
 	if err != nil {
 		return err
@@ -90,16 +90,4 @@ func (h PhotocellSensorHandler[T]) setLineToInput() error {
 	}
 
 	return nil
-}
-
-func (h PhotocellSensorHandler[T]) GetMeasurement() T {
-	return T(h.measurement)
-}
-
-func (h PhotocellSensorHandler[T]) Subscribe() <-chan T {
-	return h.measured
-}
-
-func (h *PhotocellSensorHandler[T]) CloseChannels() {
-	close(h.measured)
 }

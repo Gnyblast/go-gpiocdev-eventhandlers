@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/handlers"
+	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/factory"
+	"github.com/gnyblast/go-gpiocdev-eventhandlers/pkg/sensors"
 	"github.com/warthog618/go-gpiocdev"
 	"github.com/warthog618/go-gpiocdev/device/rpi"
 )
@@ -13,8 +14,9 @@ const pinName string = "GPIO4"
 
 func main() {
 
-	//Initialize the sensor handler, this handler wants chipname and pinname to be able to set it to output as 0 then start listening.
-	pcs := handlers.NewPhotocellSensorHandler(chip, pinName)
+	// Initialize the sensor handler, this handler wants chipname and pinname to be able to set it to output as 0 then start listening.
+	// inputMultiplier is not always applicable like this one, so can left 0
+	pcs := factory.InitializeEventHandlerFor(sensors.PHOTOCELL_SENSOR, chip, pinName, 0)
 
 	// Get the pin for the device
 	pin, err := rpi.Pin(pinName)
@@ -40,6 +42,6 @@ func main() {
 
 }
 
-func printMeasurement(noOfMeasurement int, measurement int) {
-	log.Printf("Measurement %d, Brightness is: %d", noOfMeasurement, measurement)
+func printMeasurement(noOfMeasurement int, measurement float64) {
+	log.Printf("Measurement %d, Brightness is: %f", noOfMeasurement, measurement)
 }
