@@ -6,7 +6,7 @@ It's still under development with two sensor added to the library without tests 
 
 ## Usage
 
-- Each handler is a stuct that implements `IHandler` generic interface. 
+- Each handler is a stuct that implements `IEventHandlers` generic interface. 
 - `Measure()` method is used as the main handler that does the logic/calculation/measurement for the sensor data. This should be passed to `WithEeventHandler()` method.
 - `Subscribe()` is for listening measurement if immediate responses are needed when a measurement is done. It's a channel type.
 - `CloseChannels()` is the method that closes the above channel. Best to be called when usage is no more required.
