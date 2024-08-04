@@ -29,7 +29,7 @@ Please refer to the [Examples](#examples) section to see more details examples f
 
 ## Examples
 
-|Sensor|Image|Example|
-|------|-----|-------|
-|Water Flow Sensor|![WaterFlowSensor](/images/water_flow_sensor.jpg)|[example](/examples/flow_sensor/main.go)|
-|Photocell Sensor|![Photocell](/images/photocell.jpg)|[example](/examples/photocell_sensor/main.go)|
+|Sensor|ID(sensors.go)|Image|Example|
+|------|--------------|-----|-------|
+|Water Flow Sensor|0|![WaterFlowSensor](/images/water_flow_sensor.jpg)|[example](/examples/flow_sensor/main.go)|
+|Photocell Sensor|1|![Photocell](/images/photocell.jpg)|[example](/examples/photocell_sensor/main.go)|
